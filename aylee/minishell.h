@@ -6,7 +6,7 @@
 /*   By: aylee <aylee@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 00:00:00 by aylee             #+#    #+#             */
-/*   Updated: 2026/03/02 15:13:01 by aylee            ###   ########.fr       */
+/*   Updated: 2026/03/02 19:57:35 by aylee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,10 @@ int		count_cmd(t_cmd *cmd);
 void	init_pipes(t_data *data, t_cmd *cmd, t_pipes *pipeline);
 char	**get_execve_args(t_cmd *cmd);
 
+// heredoc.c
+void	heredoc_child(int write_fd, char *delim);
+int		collect_heredoc(t_redir *redir);
+
 // pipe.c
 int		no_pipe(t_data *data, t_cmd *cmd);
 int		get_pids(t_data *data, t_cmd *cmd, t_pipes *pipeline);
@@ -131,6 +135,8 @@ int		make_right_path(const char *cmd, char **path_dirs, char **full_path);
 int		prepare_heredoc(t_data *data, t_cmd *cmd);
 int		collect_heredoc(t_redir *redir);
 int		count_heredocs(t_cmd *cmd);
+void	signal_in_message(int line_count, char *delim);
+int		collect_heredoc_fork(t_redir *redir, char *delim);
 
 // image.c
 void	shell_init(void);

@@ -6,7 +6,7 @@
 /*   By: aylee <aylee@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 13:27:25 by aylee             #+#    #+#             */
-/*   Updated: 2026/03/02 15:21:58 by aylee            ###   ########.fr       */
+/*   Updated: 2026/03/02 19:03:12 by aylee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,23 @@ int	execute_command(t_data *data, t_cmd *cmd)
 		return (127);
 	}
 	return (fork_and_exec(data, cmd, cmd_path));
+}
+
+int	execute_builtin(t_data *data, t_cmd *cmd)
+{
+	if (ft_strncmp(cmd->cmd, "echo", 5) == 0)
+		return (builtin_echo(data, cmd->argv));
+	else if (ft_strncmp(cmd->cmd, "cd", 3) == 0)
+		return (builtin_cd(data, cmd->argv));
+	else if (ft_strncmp(cmd->cmd, "pwd", 4) == 0)
+		return (builtin_pwd(data));
+	else if (ft_strncmp(cmd->cmd, "export", 7) == 0)
+		return (builtin_export(data, cmd->argv));
+	else if (ft_strncmp(cmd->cmd, "unset", 6) == 0)
+		return (builtin_unset(data, cmd->argv));
+	else if (ft_strncmp(cmd->cmd, "exit", 5) == 0)
+		return (builtin_exit(data, cmd->argv));
+	else if (ft_strncmp(cmd->cmd, "env", 4) == 0)
+		return (builtin_env(data));
+	return (-1);
 }

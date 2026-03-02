@@ -6,7 +6,7 @@
 /*   By: aylee <aylee@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 18:50:42 by aylee             #+#    #+#             */
-/*   Updated: 2026/03/02 15:47:00 by aylee            ###   ########.fr       */
+/*   Updated: 2026/03/02 19:19:14 by aylee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,6 @@ int	make_right_path(const char *cmd, char **path_dirs, char **full_path)
 	return (0);
 }
 
-int	count_heredocs(t_cmd *cmd)
-{
-	int		count;
-	t_redir	*redir;
-
-	count = 0;
-	while (cmd)
-	{
-		redir = cmd->redir;
-		while (redir)
-		{
-			if (redir->type == REDIR_HEREDOC)
-				count++;
-			redir = redir->next;
-		}
-		cmd = cmd->next;
-	}
-	return (count);
-}
-
 void	sigint_handler(int signum) //////////임시 메모리 빵꾸남.
 {
 	(void)signum;
@@ -65,35 +45,6 @@ void	signal_in_message(int line_count, char *delim)
 	ft_putstr_fd(" delimited by end-of-file (wanted '", STDOUT_FILENO);
 	ft_putstr_fd(delim, STDOUT_FILENO);
 	ft_putstr_fd("')\n", STDOUT_FILENO);
-}
-
-void	heredoc_child(int write_fd, char *delim)
-{
-	char	*line;
-	int		line_count;
-
-	signal(SIGINT, SIG_DFL);
-	line_count = 0;
-	while (1)
-	{
-		line = readline("> ");
-		if (!line)
-		{
-			signal_in_message(line_count, delim);
-			break ;
-		}
-		if (ft_strncmp(line, delim, ft_strlen(delim) + 1) == 0)
-		{
-			free(line);
-			break ;
-		}
-		write(write_fd, line, ft_strlen(line));
-		write(write_fd, "\n", 1);
-		free(line);
-		line_count++;
-	}
-	close(write_fd);
-	exit(0);
 }
 
 int	collect_heredoc_fork(t_redir *redir, char *delim)
@@ -119,20 +70,6 @@ int	collect_heredoc_fork(t_redir *redir, char *delim)
 	if (WIFSIGNALED(status))
 		return (close(fd[0]), -1);
 	redir->fd = fd[0];
-	return (0);
-}
-
-int	collect_heredoc(t_redir *redir)
-{
-	while (redir)
-	{
-		if (redir->type == REDIR_HEREDOC)
-		{
-			if (collect_heredoc_fork(redir, redir->file) == -1)
-				return (-1);
-		}
-		redir = redir->next;
-	}
 	return (0);
 }
 

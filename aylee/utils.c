@@ -6,7 +6,7 @@
 /*   By: aylee <aylee@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 00:00:00 by aylee             #+#    #+#             */
-/*   Updated: 2026/03/02 16:59:57 by aylee            ###   ########.fr       */
+/*   Updated: 2026/03/02 18:57:53 by aylee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,7 @@ void	merge_key_value(t_env *env, char **arr)
 	}
 	arr[i] = NULL;
 }
-/*
- * t_env 연결 리스트를 execve용 char** 배열로 변환
- * 반환값: {"KEY=VALUE", ..., NULL} 형태 (호출자가 free_split으로 해제)
- */
+
 char	**env_to_array(t_env *env)
 {
 	t_env	*cur;

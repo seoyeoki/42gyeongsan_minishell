@@ -6,7 +6,7 @@
 #    By: aylee <aylee@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/12 00:00:00 by aylee             #+#    #+#              #
-#    Updated: 2026/03/02 15:21:35 by aylee            ###   ########.fr        #
+#    Updated: 2026/03/02 19:52:53 by aylee            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,17 +16,9 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lreadline
 
-SRCS = main.c \
-       built_in.c \
-       env.c \
-       utils.c \
-       main_init.c \
-       exec.c \
-	   parse.c \
-	   pipe.c \
-	   exec2.c \
-	   image.c \
-	   command.c
+SRCS = built_in.c cmd_path.c command.c env.c exec.c exec2.c exit.c export.c \
+		heredoc.c image.c main_init.c main.c make_node.c pipe.c utils.c \
+		parse.c
 
 OBJS = $(SRCS:.c=.o)
 LIBFT = ./libft/libft.a
