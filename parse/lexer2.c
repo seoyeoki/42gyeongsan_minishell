@@ -71,6 +71,7 @@ t_token	*lexer(char *input, t_data *data)
 	lx.tail = NULL;
 	lx.buf = NULL;
 	lx.quoted = 0;
+	lx.error = 0;
 	i = 0;
 	while (input[i])
 	{
@@ -88,5 +89,12 @@ t_token	*lexer(char *input, t_data *data)
 			lex_char(input, &i, &lx, data);
 	}
 	flush_word(&lx);
+	if (lx.error)
+	{
+		free_tokens(lx.head);
+		ft_putstr_fd("minishell: syntax error: unclosed quote\n", 2);
+		data->exit_status = 2;
+		return (NULL);
+	}
 	return (lx.head);
 }

@@ -68,6 +68,8 @@ void	lex_sq(char *input, int *i, t_lex *lx)
 	}
 	if (input[*i] == '\'')
 		(*i)++;
+	else
+		lx->error = 1;
 	lx->quoted = 1;
 }
 
@@ -92,5 +94,7 @@ void	lex_dq(char *input, int *i, t_lex *lx, t_data *data)
 	}
 	if (input[*i] == '"')
 		(*i)++;
+	else
+		lx->error = 1;
 	lx->quoted = 1;
 }

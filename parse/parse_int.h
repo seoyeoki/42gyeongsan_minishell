@@ -21,6 +21,7 @@ typedef struct s_lex
 	t_token		*tail;
 	char		*buf;
 	int			quoted;
+	int			error;
 }	t_lex;
 
 /* lexer.c → lexer2.c */
