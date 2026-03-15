@@ -110,7 +110,8 @@ t_token	*lexer(char *input, t_data *data)
 			lex_op(input, &i, &lx);
 		}
 		else if (input[i] == '&' || input[i] == ';'
-			|| input[i] == '(' || input[i] == ')')
+			|| input[i] == '(' || input[i] == ')'
+			|| input[i] == '*')
 		{
 			flush_word(&lx);
 			lex_unsupported(input, &i, &lx);
