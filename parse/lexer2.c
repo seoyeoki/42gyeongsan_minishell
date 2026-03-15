@@ -24,7 +24,7 @@ static void	lex_unsupported(char *in, int *i, t_lex *lx)
 		|| (in[*i] == '|' && in[*i + 1] == '|'))
 		tok[j++] = in[*i + 1];
 	tok[j] = '\0';
-	ft_putstr_fd("minishell: syntax error near unexpected token '", 2);
+	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 	ft_putstr_fd(tok, 2);
 	ft_putstr_fd("'\n", 2);
 	lx->error = 2;
