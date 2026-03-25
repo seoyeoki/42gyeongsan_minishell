@@ -22,7 +22,12 @@ typedef struct s_lex
 	char		*buf;
 	int			quoted;
 	int			error;
+	char		*err_token;
 }	t_lex;
+
+/* error.c */
+void	err_syntax_token(char *token);
+void	err_unclosed_quote(void);
 
 /* expand.c */
 char	*expand_line(char *line, t_data *data);

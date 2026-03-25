@@ -12,44 +12,42 @@
 
 #include "parse_int.h"
 
-static void	lex_unsupported(char *in, int *i, t_lex *lx)
+static void	lex_unsupported(char *input, int *i, t_lex *lx)
 {
 	char	tok[3];
 	int		j;
 
 	j = 0;
-	tok[j++] = in[*i];
-	if ((in[*i] == '&' && in[*i + 1] == '&')
-		|| (in[*i] == ';' && in[*i + 1] == ';')
-		|| (in[*i] == '|' && in[*i + 1] == '|'))
-		tok[j++] = in[*i + 1];
+	tok[j++] = input[*i];
+	if ((input[*i] == '&' && input[*i + 1] == '&')
+		|| (input[*i] == ';' && input[*i + 1] == ';')
+		|| (input[*i] == '|' && input[*i + 1] == '|'))
+		tok[j++] = input[*i + 1];
 	tok[j] = '\0';
-	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
-	ft_putstr_fd(tok, 2);
-	ft_putstr_fd("'\n", 2);
+	lx->err_token = ft_strdup(tok);
 	lx->error = 2;
 }
 
-static void	lex_op(char *in, int *i, t_lex *lx)
+static void	lex_op(char *input, int *i, t_lex *lx)
 {
 	t_token	*tok;
 
 	tok = NULL;
-	if (in[*i] == '|')
+	if (input[*i] == '|')
 		tok = new_token(TOK_PIPE, ft_strdup("|"));
-	else if (in[*i] == '<' && in[*i + 1] == '<')
+	else if (input[*i] == '<' && input[*i + 1] == '<')
 	{
 		tok = new_token(TOK_HEREDOC, ft_strdup("<<"));
 		(*i)++;
 	}
-	else if (in[*i] == '>' && in[*i + 1] == '>')
+	else if (input[*i] == '>' && input[*i + 1] == '>')
 	{
 		tok = new_token(TOK_REDIR_APPEND, ft_strdup(">>"));
 		(*i)++;
 	}
-	else if (in[*i] == '<')
+	else if (input[*i] == '<')
 		tok = new_token(TOK_REDIR_IN, ft_strdup("<"));
-	else
+	else if (input[*i] == '>')
 		tok = new_token(TOK_REDIR_OUT, ft_strdup(">"));
 	(*i)++;
 	if (!lx->head)
@@ -59,25 +57,50 @@ static void	lex_op(char *in, int *i, t_lex *lx)
 	lx->tail = tok;
 }
 
-static void	lex_char(char *in, int *i, t_lex *lx, t_data *data)
+static void	lex_char(char *input, int *i, t_lex *lx, t_data *data)
 {
 	char	*exp;
 
-	if (in[*i] == '\'')
-		lex_single_quote(in, i, lx);
-	else if (in[*i] == '"')
-		lex_double_quote(in, i, lx, data);
-	else if (in[*i] == '$')
+	if (input[*i] == '\'')
+		lex_single_quote(input, i, lx);
+	else if (input[*i] == '"')
+		lex_double_quote(input, i, lx, data);
+	else if (input[*i] == '$')
 	{
-		exp = expand_dollar(in, i, data);
+		exp = expand_dollar(input, i, data);
 		lx->buf = str_append(lx->buf, exp);
 		free(exp);
 	}
 	else
 	{
-		lx->buf = str_append_char(lx->buf, in[*i]);
+		lx->buf = str_append_char(lx->buf, input[*i]);
 		(*i)++;
 	}
+}
+
+static int	lex_switch(char *input, int *i, t_lex *lx, t_data *data)
+{
+	if (input[*i] == ' ' || input[*i] == '\t')
+	{
+		flush_word(lx);
+		(*i)++;
+		return (0);
+	}
+	if (ft_strchr("&;()*", input[*i])
+		|| (input[*i] == '|' && input[*i + 1] == '|'))
+	{
+		flush_word(lx);
+		lex_unsupported(input, i, lx);
+		return (1);
+	}
+	if (input[*i] == '|' || input[*i] == '<' || input[*i] == '>')
+	{
+		flush_word(lx);
+		lex_op(input, i, lx);
+		return (0);
+	}
+	lex_char(input, i, lx, data);
+	return (0);
 }
 
 t_token	*lexer(char *input, t_data *data)
@@ -90,42 +113,20 @@ t_token	*lexer(char *input, t_data *data)
 	lx.buf = NULL;
 	lx.quoted = 0;
 	lx.error = 0;
+	lx.err_token = NULL;
 	i = 0;
 	while (input[i])
-	{
-		if (input[i] == ' ' || input[i] == '\t')
-		{
-			flush_word(&lx);
-			i++;
-		}
-		else if (input[i] == '|' && input[i + 1] == '|')
-		{
-			flush_word(&lx);
-			lex_unsupported(input, &i, &lx);
+		if (lex_switch(input, &i, &lx, data))
 			break ;
-		}
-		else if (input[i] == '|' || input[i] == '<' || input[i] == '>')
-		{
-			flush_word(&lx);
-			lex_op(input, &i, &lx);
-		}
-		else if (input[i] == '&' || input[i] == ';'
-			|| input[i] == '(' || input[i] == ')'
-			|| input[i] == '*')
-		{
-			flush_word(&lx);
-			lex_unsupported(input, &i, &lx);
-			break ;
-		}
-		else
-			lex_char(input, &i, &lx, data);
-	}
 	flush_word(&lx);
 	if (lx.error)
 	{
 		free_tokens(lx.head);
 		if (lx.error == 1)
-			ft_putstr_fd("minishell: syntax error: unclosed quote\n", 2);
+			err_unclosed_quote();
+		else if (lx.err_token)
+			err_syntax_token(lx.err_token);
+		free(lx.err_token);
 		data->exit_status = 2;
 		return (NULL);
 	}

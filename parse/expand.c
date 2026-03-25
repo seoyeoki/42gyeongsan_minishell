@@ -51,7 +51,10 @@ char	*expand_dollar(char *input, int *i, t_data *data)
 
 	(*i)++;
 	if (input[*i] == '?')
-		return ((*i)++, ft_itoa(data->exit_status));
+	{
+		(*i)++;
+		return (ft_itoa(data->exit_status));
+	}
 	start = *i;
 	if (ft_isalpha(input[*i]) || input[*i] == '_')
 		while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
