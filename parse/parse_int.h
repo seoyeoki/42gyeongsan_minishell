@@ -37,6 +37,7 @@ void	init_lex(t_lex *lx);
 t_token	*new_token(t_tok_type type, char *str);
 void	free_tokens(t_token *head);
 void	flush_word(t_lex *lx);
+void	append_token(t_lex *lx, t_token *tok);
 
 /* lexer_quote.c */
 void	lex_single_quote(char *input, int *i, t_lex *lx);

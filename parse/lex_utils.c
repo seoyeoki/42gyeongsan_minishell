@@ -49,6 +49,15 @@ void	free_tokens(t_token *head)
 	}
 }
 
+void	append_token(t_lex *lx, t_token *tok)
+{
+	if (!lx->head)
+		lx->head = tok;
+	else
+		lx->tail->next = tok;
+	lx->tail = tok;
+}
+
 void	flush_word(t_lex *lx)
 {
 	t_token	*tok;
@@ -61,9 +70,5 @@ void	flush_word(t_lex *lx)
 	tok->quoted = lx->quoted;
 	lx->buf = NULL;
 	lx->quoted = 0;
-	if (!lx->head)
-		lx->head = tok;
-	else
-		lx->tail->next = tok;
-	lx->tail = tok;
+	append_token(lx, tok);
 }

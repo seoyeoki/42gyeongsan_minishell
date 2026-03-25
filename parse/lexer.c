@@ -54,11 +54,7 @@ static void	lex_op(char *input, int *i, t_lex *lx)
 	else if (input[*i] == '>')
 		tok = new_token(TOK_REDIR_OUT, ft_strdup(">"));
 	(*i)++;
-	if (!lx->head)
-		lx->head = tok;
-	else
-		lx->tail->next = tok;
-	lx->tail = tok;
+	append_token(lx, tok);
 }
 
 static void	lex_char(char *input, int *i, t_lex *lx, t_data *data)
@@ -85,21 +81,20 @@ static int	lex_switch(char *input, int *i, t_lex *lx, t_data *data)
 	{
 		flush_word(lx);
 		(*i)++;
-		return (0);
 	}
-	if (ft_strchr("&;()*", c) || (c == '|' && next == '|'))
+	else if (ft_strchr("&;()*", c) || (c == '|' && next == '|'))
 	{
 		flush_word(lx);
 		lex_unsupported(input, i, lx);
 		return (1);
 	}
-	if (c == '|' || c == '<' || c == '>')
+	else if (c == '|' || c == '<' || c == '>')
 	{
 		flush_word(lx);
 		lex_op(input, i, lx);
-		return (0);
 	}
-	lex_char(input, i, lx, data);
+	else
+		lex_char(input, i, lx, data);
 	return (0);
 }
 
