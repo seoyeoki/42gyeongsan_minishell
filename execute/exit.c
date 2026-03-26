@@ -6,15 +6,15 @@
 /*   By: aylee <aylee@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 19:01:21 by aylee             #+#    #+#             */
-/*   Updated: 2026/03/02 19:02:42 by aylee            ###   ########.fr       */
+/*   Updated: 2026/03/26 19:36:00 by aylee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int is_valid_num(const char *str)
+static int	is_valid_num(const char *str)
 {
-	int i;
+	int	i;
 
 	if (!str || !*str)
 		return (0);
@@ -30,12 +30,12 @@ static int is_valid_num(const char *str)
 	return (1);
 }
 
-int long_range_check(char *str)
+int	long_range_check(char *str)
 {
-	char *max;
-	char *min;
-	int i;
-	int len;
+	char	*max;
+	char	*min;
+	int		i;
+	int		len;
 
 	max = "9223372036854775807";
 	min = "9223372036854775808";
@@ -54,11 +54,11 @@ int long_range_check(char *str)
 	return (ft_strncmp(str + i, max, 19) <= 0);
 }
 
-long long str_to_ll(char *str)
+long long	str_to_ll(char *str)
 {
-	long long result;
-	int sign;
-	int i;
+	long long	result;
+	int			sign;
+	int			i;
 
 	result = 0;
 	sign = 1;
@@ -74,9 +74,9 @@ long long str_to_ll(char *str)
 	return (result * sign);
 }
 
-int builtin_exit(t_data *data, char **args)
+int	builtin_exit(t_data *data, char **args)
 {
-	int status;
+	int	status;
 
 	printf("exit\n");
 	if (!args || !args[0])

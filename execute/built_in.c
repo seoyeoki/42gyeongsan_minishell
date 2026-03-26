@@ -6,7 +6,7 @@
 /*   By: aylee <aylee@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 14:46:49 by aylee             #+#    #+#             */
-/*   Updated: 2026/03/02 19:03:13 by aylee            ###   ########.fr       */
+/*   Updated: 2026/03/26 19:07:59 by aylee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,13 @@ int	builtin_unset(t_data *data, char **args)
 	return (0);
 }
 
-int	builtin_env(t_data *data)
+int	builtin_env(t_data *data, char **args)
 {
+	if (args && args[0] != NULL)
+	{
+		print_error_msg(data, "env", "too many arguments", 1);
+		return (1);
+	}
 	print_env_list(data->env);
 	return (0);
 }

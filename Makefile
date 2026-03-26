@@ -13,9 +13,11 @@ $(NAME): $(LIBFT) $(LIBPARSE) $(LIBEXEC)
 
 $(LIBFT):
 	@make -s -C libft bonus
+	@echo " [ ok ] | all libft is readly! "
 
 $(LIBPARSE):
 	@make -s -C parse
+	@echo " [ ok ] | minishell is readly! "
 
 $(LIBEXEC):
 	@make -s -C execute
@@ -23,6 +25,8 @@ $(LIBEXEC):
 clean:
 	@make -s -C parse clean
 	@make -s -C execute clean
+	@make -s -C libft clean
+	@echo " [ ok ] | all files are clean! "
 
 fclean:
 	@make -s -C libft fclean

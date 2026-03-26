@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seoyeoki <seoyeoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aylee <aylee@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 00:00:00 by seoyeoki          #+#    #+#             */
-/*   Updated: 2026/03/03 00:00:00 by seoyeoki         ###   ########.fr       */
+/*   Updated: 2026/03/26 19:40:52 by aylee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ char	*str_append(char *s, char *add)
 	free(s);
 	return (res);
 }
-
 
 char	*expand_tilde(t_data *data)
 {
