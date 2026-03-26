@@ -14,9 +14,7 @@
 
 static int	syntax_err(t_data *data, char *msg)
 {
-	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("'\n", 2);
+	err_syntax_token(msg);
 	data->exit_status = 2;
 	return (-1);
 }

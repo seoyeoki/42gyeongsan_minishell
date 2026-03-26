@@ -13,7 +13,7 @@
 #ifndef PARSE_INT_H
 # define PARSE_INT_H
 
-# include "../aylee/minishell.h"
+# include "../minishell.h"
 
 typedef struct s_lex
 {
@@ -22,12 +22,28 @@ typedef struct s_lex
 	char		*buf;
 	int			quoted;
 	int			error;
+	char		*err_token;
 }	t_lex;
 
-/* lexer.c → lexer2.c */
+/* error.c */
+void	err_syntax_token(char *token);
+void	err_unclosed_quote(void);
+
+/* expand.c */
+char	*expand_line(char *line, t_data *data);
+
+/* lex_utils.c */
+void	init_lex(t_lex *lx);
+t_token	*new_token(t_tok_type type, char *str);
+void	free_tokens(t_token *head);
 void	flush_word(t_lex *lx);
-void	lex_sq(char *in, int *i, t_lex *lx);
-void	lex_dq(char *in, int *i, t_lex *lx, t_data *data);
+void	append_token(t_lex *lx, t_token *tok);
+
+/* lexer_quote.c */
+void	lex_single_quote(char *input, int *i, t_lex *lx);
+void	lex_double_quote(char *input, int *i, t_lex *lx, t_data *data);
+void	lex_char_expand(char *input, int *i, t_lex *lx, t_data *data);
+void	lex_char_plain(char *input, int *i, t_lex *lx);
 
 /* parse.c → parse2.c */
 void	add_argv(t_cmd *cmd, char *word);
