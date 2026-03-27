@@ -25,7 +25,9 @@ static int	check_syntax(t_token *tok, t_data *data)
 
 	if (!tok)
 		return (0);
-	prev = TOK_PIPE;
+	if (tok->type == TOK_PIPE)
+		return (syntax_err(data, "|"));
+	prev = TOK_WORD;
 	while (tok)
 	{
 		if (tok->type == TOK_PIPE && prev == TOK_PIPE)
@@ -84,6 +86,7 @@ static t_cmd	*build_cmds(t_token *tok)
 			add_redir(cur, tok);
 			tok = tok->next;
 		}
+
 		tok = tok->next;
 	}
 	return (head);
