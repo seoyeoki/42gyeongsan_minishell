@@ -171,5 +171,6 @@ char *expand_dollar(char *input, int *i, t_data *data);
 char *expand_tilde(t_data *data);
 char *expand_line(char *line, t_data *data);
 void signal_interactive(void);
+void signal_child(void);
 
 #endif
