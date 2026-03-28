@@ -57,6 +57,8 @@ int	builtin_cd(t_data *data, char **args)
 {
 	const char	*path;
 	t_env		*home_node;
+	t_env		*pwd_node;
+	char		*cwd;
 
 	if (!args || args[0] == NULL)
 	{
@@ -76,6 +78,12 @@ int	builtin_cd(t_data *data, char **args)
 		print_error_msg(data, "cd", strerror(errno), 1);
 		return (1);
 	}
+	pwd_node = find_env_node(data->env, "PWD");
+	if (pwd_node)
+		set_env_var(data, "OLDPWD", pwd_node->value);
+	cwd = getcwd(NULL, 0);
+	set_env_var(data, "PWD", cwd);
+	free(cwd);
 	return (0);
 }
 
