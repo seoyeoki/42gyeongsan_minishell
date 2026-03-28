@@ -113,7 +113,7 @@ char *find_command_path(char *cmd, t_env *env);
 int execute_command(t_data *data, t_cmd *cmd);
 int execute_pipeline(t_data *data, t_cmd *cmd);
 int apply_redir(t_data *data, t_redir *redir);
-void exec_child(t_data *data, t_cmd *cmd, t_pipes *pipeline, int i);
+void exec_child(t_data *data, t_cmd *head, t_pipes *pipeline, int i);
 void close_all_pipes(int **pipes, int count);
 int count_cmd(t_cmd *cmd);
 void init_pipes(t_data *data, t_cmd *cmd, t_pipes *pipeline);
