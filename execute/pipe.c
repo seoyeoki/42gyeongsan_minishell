@@ -20,6 +20,8 @@
  */
 static void	no_pipe_child(t_data *data, t_cmd *cmd)
 {
+	int	status;
+
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
 	if (prepare_heredoc(data, cmd) == -1)
@@ -32,7 +34,9 @@ static void	no_pipe_child(t_data *data, t_cmd *cmd)
 		clean_up(data, NULL);
 		exit(1);
 	}
-	exit(execute_command(data, cmd));
+	status = execute_command(data, cmd);
+	free_env_list(data->env);
+	exit(status);
 }
 
 int	no_pipe(t_data *data, t_cmd *cmd)

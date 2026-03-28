@@ -67,6 +67,12 @@ int	prepare_child(t_data *data, t_cmd *cmd, t_pipes *pipeline, int i)
 	return (0);
 }
 
+static void	exit_child(t_data *data, int status)
+{
+	free_env_list(data->env);
+	exit(status);
+}
+
 void	exec_child(t_data *data, t_cmd *cmd, t_pipes *pipeline, int i)
 {
 	char	*cmd_path;
@@ -76,14 +82,14 @@ void	exec_child(t_data *data, t_cmd *cmd, t_pipes *pipeline, int i)
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
 	if (prepare_child(data, cmd, pipeline, i) == -1)
-		exit(1);
+		exit_child(data, 1);
 	if (is_builtin(cmd->cmd))
-		exit(execute_builtin(data, cmd));
+		exit_child(data, execute_builtin(data, cmd));
 	cmd_path = find_command_path(cmd->cmd, data->env);
 	if (!cmd_path)
 	{
 		print_error_msg(data, cmd->cmd, "command not found", 127);
-		exit(127);
+		exit_child(data, 127);
 	}
 	envp = env_to_array(data->env);
 	args = get_execve_args(cmd);
@@ -92,7 +98,7 @@ void	exec_child(t_data *data, t_cmd *cmd, t_pipes *pipeline, int i)
 	free(cmd_path);
 	free_split(args);
 	free_split(envp);
-	exit(126);
+	exit_child(data, 126);
 }
 
 int	execute_pipeline(t_data *data, t_cmd *cmd)
