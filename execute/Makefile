@@ -15,7 +15,7 @@ CFLAGS	= -Wall -Wextra -Werror -I.. -I/opt/homebrew/opt/readline/include
 AR		= ar rcs
 
 SRCS	= built_in.c cmd_path.c command.c env.c exec.c exec2.c exit.c export.c \
-		heredoc.c image.c main_init.c main.c make_node.c pipe.c utils.c
+		heredoc.c image.c main_init.c main.c make_node.c pipe.c stderr.c utils.c
 OBJS	= $(SRCS:.c=.o)
 LIB		= libexec.a
 
