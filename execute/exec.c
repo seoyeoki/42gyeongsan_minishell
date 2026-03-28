@@ -67,38 +67,44 @@ int	prepare_child(t_data *data, t_cmd *cmd, t_pipes *pipeline, int i)
 	return (0);
 }
 
-static void	exit_child(t_data *data, int status)
+static void	exit_child(t_data *data, t_cmd *head, t_pipes *pipeline, int status)
 {
+	free_cmd_list(head);
+	free_pipeline(pipeline);
 	free_env_list(data->env);
 	exit(status);
 }
 
-void	exec_child(t_data *data, t_cmd *cmd, t_pipes *pipeline, int i)
+void	exec_child(t_data *data, t_cmd *head, t_pipes *pipeline, int i)
 {
-	char	*cmd_path;
+	t_cmd	*cmd;
 	char	**envp;
 	char	**args;
+	char	*path;
+	int		idx;
 
+	idx = i;
+	cmd = head;
+	while (idx-- > 0)
+		cmd = cmd->next;
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
 	if (prepare_child(data, cmd, pipeline, i) == -1)
-		exit_child(data, 1);
+		exit_child(data, head, pipeline, 1);
 	if (is_builtin(cmd->cmd))
-		exit_child(data, execute_builtin(data, cmd));
-	cmd_path = find_command_path(cmd->cmd, data->env);
-	if (!cmd_path)
-	{
-		print_error_msg(data, cmd->cmd, "command not found", 127);
-		exit_child(data, 127);
-	}
+		exit_child(data, head, pipeline, execute_builtin(data, cmd));
+	path = find_command_path(cmd->cmd, data->env);
+	if (!path)
+		return (print_error_msg(data, cmd->cmd, "command not found", 127),
+			exit_child(data, head, pipeline, 127));
 	envp = env_to_array(data->env);
 	args = get_execve_args(cmd);
-	execve(cmd_path, args, envp);
+	execve(path, args, envp);
 	print_error(data, cmd->cmd, errno, 126);
-	free(cmd_path);
+	free(path);
 	free_split(args);
 	free_split(envp);
-	exit_child(data, 126);
+	exit_child(data, head, pipeline, 126);
 }
 
 int	execute_pipeline(t_data *data, t_cmd *cmd)
