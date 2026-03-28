@@ -61,35 +61,6 @@ void	free_cmd_list(t_cmd *cmd)
 	}
 }
 
-void	add_argv(t_cmd *cmd, char *word)
-{
-	int		count;
-	char	**new_argv;
-	int		i;
-
-	if (!cmd->cmd)
-	{
-		cmd->cmd = ft_strdup(word);
-		return ;
-	}
-	count = 0;
-	while (cmd->argv && cmd->argv[count])
-		count++;
-	new_argv = malloc(sizeof(char *) * (count + 2));
-	if (!new_argv)
-		return ;
-	i = 0;
-	while (i < count)
-	{
-		new_argv[i] = cmd->argv[i];
-		i++;
-	}
-	new_argv[count] = ft_strdup(word);
-	new_argv[count + 1] = NULL;
-	free(cmd->argv);
-	cmd->argv = new_argv;
-}
-
 void	redir_append(t_cmd *cmd, t_redir_type type, char *file, int quoted)
 {
 	t_redir	*node;
@@ -112,4 +83,20 @@ void	redir_append(t_cmd *cmd, t_redir_type type, char *file, int quoted)
 	while (cur->next)
 		cur = cur->next;
 	cur->next = node;
+}
+
+void	add_redir(t_cmd *cmd, t_token *tok)
+{
+	t_redir_type	type;
+	t_token			*file;
+
+	file = tok->next;
+	type = REDIR_IN;
+	if (tok->type == TOK_REDIR_OUT)
+		type = REDIR_OUT;
+	else if (tok->type == TOK_REDIR_APPEND)
+		type = REDIR_APPEND;
+	else if (tok->type == TOK_HEREDOC)
+		type = REDIR_HEREDOC;
+	redir_append(cmd, type, file->str, file->quoted);
 }

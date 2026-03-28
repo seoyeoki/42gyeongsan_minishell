@@ -28,7 +28,7 @@ typedef struct s_lex
 /* error.c */
 void	err_syntax_token(char *token);
 void	err_unclosed_quote(void);
-int		syntax_err(t_data *data, char *msg);
+int		syntax_err(t_data *data, char *token);
 
 /* expand.c */
 char	*expand_line(char *line, t_data *data);
@@ -46,8 +46,12 @@ void	lex_double_quote(char *input, int *i, t_lex *lx, t_data *data);
 void	lex_char_expand(char *input, int *i, t_lex *lx, t_data *data);
 void	lex_char_plain(char *input, int *i, t_lex *lx);
 
+/* parse_argv.c */
+int		count_words(t_token *tok);
+int		alloc_argv(t_cmd *cmd, t_token *tok);
+
 /* parse_utils.c */
-void	add_argv(t_cmd *cmd, char *word);
 void	redir_append(t_cmd *cmd, t_redir_type type, char *file, int quoted);
+void	add_redir(t_cmd *cmd, t_token *tok);
 
 #endif

@@ -40,47 +40,53 @@ static int	check_syntax(t_token *tok, t_data *data)
 	return (1);
 }
 
-static void	add_redir(t_cmd *cmd, t_token *tok)
+static t_token	*fill_segment(t_cmd *cur, t_token *tok)
 {
-	t_redir_type	type;
-	t_token			*file;
+	int	idx;
 
-	file = tok->next;
-	type = REDIR_IN;
-	if (tok->type == TOK_REDIR_OUT)
-		type = REDIR_OUT;
-	else if (tok->type == TOK_REDIR_APPEND)
-		type = REDIR_APPEND;
-	else if (tok->type == TOK_HEREDOC)
-		type = REDIR_HEREDOC;
-	redir_append(cmd, type, file->str, file->quoted);
-}
-
-static t_cmd	*build_cmds(t_token *tok)
-{
-	t_cmd	*head;
-	t_cmd	*cur;
-
-	head = new_cmd();
-	if (!head)
-		return (NULL);
-	cur = head;
-	while (tok)
+	idx = 0;
+	while (tok && tok->type != TOK_PIPE)
 	{
-		if (tok->type == TOK_PIPE)
+		if (tok->type == TOK_WORD)
 		{
-			cur->next = new_cmd();
-			cur = cur->next;
+			if (!cur->cmd)
+				cur->cmd = ft_strdup(tok->str);
+			else
+				cur->argv[idx++] = ft_strdup(tok->str);
 		}
-		else if (tok->type == TOK_WORD)
-			add_argv(cur, tok->str);
 		else
 		{
 			add_redir(cur, tok);
 			tok = tok->next;
 		}
-
 		tok = tok->next;
+	}
+	return (tok);
+}
+
+static t_cmd	*build_cmds(t_token *tok)
+{
+	t_cmd	*head;
+	t_cmd	*prev;
+	t_cmd	*cur;
+
+	head = NULL;
+	prev = NULL;
+	while (tok)
+	{
+		cur = new_cmd();
+		if (!cur)
+			return (free_cmd_list(head), NULL);
+		if (!alloc_argv(cur, tok))
+			return (free_cmd_list(head), NULL);
+		if (!head)
+			head = cur;
+		else
+			prev->next = cur;
+		prev = cur;
+		tok = fill_segment(cur, tok);
+		if (tok)
+			tok = tok->next;
 	}
 	return (head);
 }

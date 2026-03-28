@@ -14,7 +14,7 @@
 
 volatile sig_atomic_t	g_signal;
 
-static void	sig_int_handler(int sig)
+static void	sigint_handler(int sig)
 {
 	g_signal = sig;
 	write(STDOUT_FILENO, "\n", 1);
@@ -25,6 +25,6 @@ static void	sig_int_handler(int sig)
 
 void	signal_interactive(void)
 {
-	signal(SIGINT, sig_int_handler);
+	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
