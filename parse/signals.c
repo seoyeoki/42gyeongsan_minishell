@@ -29,8 +29,3 @@ void	signal_interactive(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	signal_child(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-}
