@@ -19,18 +19,13 @@ void	lex_single_quote(char *input, int *i, t_lex *lx)
 
 	(*i)++;
 	start = *i;
-	while (input[*i] && input[*i] != '\'' && input[*i] != '\\')
+	while (input[*i] && input[*i] != '\'')
 		(*i)++;
 	chunk = ft_substr(input, start, *i - start);
 	lx->buf = str_append(lx->buf, chunk);
 	free(chunk);
 	if (input[*i] == '\'')
 		(*i)++;
-	else if (input[*i] == '\\')
-	{
-		lx->err_token = ft_strdup("\\");
-		lx->error = 2;
-	}
 	else
 		lx->error = 1;
 	lx->quoted = 1;
@@ -44,7 +39,7 @@ void	lex_double_quote(char *input, int *i, t_lex *lx, t_data *data)
 
 	(*i)++;
 	start = *i;
-	while (input[*i] && input[*i] != '"' && input[*i] != '\\')
+	while (input[*i] && input[*i] != '"')
 		(*i)++;
 	chunk = ft_substr(input, start, *i - start);
 	exp = expand_line(chunk, data);
@@ -53,11 +48,6 @@ void	lex_double_quote(char *input, int *i, t_lex *lx, t_data *data)
 	free(exp);
 	if (input[*i] == '"')
 		(*i)++;
-	else if (input[*i] == '\\')
-	{
-		lx->err_token = ft_strdup("\\");
-		lx->error = 2;
-	}
 	else
 		lx->error = 1;
 	lx->quoted = 1;
