@@ -103,6 +103,7 @@ void	make_env_new(t_data *data, char **args, char *equal_sign, int i);
 
 // utils.c
 void	clean_up(t_data *data, t_cmd *cmd);
+void	free_split(char **split);
 char	**env_to_array(t_env *env);
 
 // stderr.c
