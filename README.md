@@ -53,6 +53,18 @@ minishell$
 valgrind --suppressions=readline.supp ./minishell
 ```
 
+For a full leak check including all leak kinds:
+
+```bash
+valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp ./minishell
+```
+
+| Option | Description |
+|--------|-------------|
+| `--leak-check=full` | Show details for each leaked block |
+| `--show-leak-kinds=all` | Report all leak kinds: definite, indirect, possible, reachable |
+| `--suppressions=readline.supp` | Suppress known readline internal leaks |
+
 ## Features
 
 - Interactive prompt with command history (arrow keys supported)
