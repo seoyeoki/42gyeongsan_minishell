@@ -12,6 +12,13 @@
 
 #include "minishell.h"
 
+static char	*get_line(void)
+{
+	if (isatty(STDIN_FILENO))
+		return (readline("minishell$ "));
+	return (readline(NULL));
+}
+
 int	is_builtin(char *cmd)
 {
 	if (ft_strncmp(cmd, "echo", 5) == 0)
@@ -54,10 +61,8 @@ static void	run_shell(t_data *data)
 
 	while (1)
 	{
-		if (isatty(STDIN_FILENO))
-			line = readline("minishell$ ");
-		else
-			line = readline(NULL);
+		signal_interactive();
+		line = get_line();
 		if (!line)
 		{
 			if (isatty(STDIN_FILENO))
@@ -72,9 +77,7 @@ static void	run_shell(t_data *data)
 		else if (g_signal == SIGINT)
 			data->exit_status = 130;
 		g_signal = 0;
-		signal_interactive();
 		free(line);
-		line = NULL;
 	}
 }
 

@@ -12,47 +12,6 @@
 
 #include "minishell.h"
 
-static int	is_n_flag(char *arg)
-{
-	int	i;
-
-	if (!arg || arg[0] != '-' || !arg[1])
-		return (0);
-	i = 1;
-	while (arg[i])
-		if (arg[i++] != 'n')
-			return (0);
-	return (1);
-}
-
-int	builtin_echo(t_data *data, char **args)
-{
-	int	i;
-	int	newline;
-
-	(void)data;
-	newline = 1;
-	i = 0;
-	while (args && args[i] && is_n_flag(args[i]))
-	{
-		newline = 0;
-		i++;
-	}
-	while (args && args[i])
-	{
-		if (ft_strncmp(args[i], "$?", 3) == 0)
-			printf("%d", data->exit_status);
-		else
-			printf("%s", args[i]);
-		if (args[i + 1])
-			printf(" ");
-		i++;
-	}
-	if (newline)
-		printf("\n");
-	return (0);
-}
-
 int	builtin_pwd(t_data *data)
 {
 	char	cwd[1024];

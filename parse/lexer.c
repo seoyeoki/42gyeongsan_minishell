@@ -106,24 +106,12 @@ t_token	*lexer(char *input, t_data *data)
 	init_lex(&lx);
 	i = 0;
 	while (input[i])
+	{
 		if (lex_switch(input, &i, &lx, data))
 			break ;
+	}
 	flush_word(&lx);
 	if (lx.error)
-	{
-		free_tokens(lx.head);
-		if (lx.error == 1)
-		{
-			err_unclosed_quote();
-			data->exit_status = 1;
-		}
-		else if (lx.error == 2)
-		{
-			err_syntax_token(lx.err_token);
-			free(lx.err_token);
-			data->exit_status = 2;
-		}
-		return (NULL);
-	}
+		return (handle_lex_error(&lx, data));
 	return (lx.head);
 }
