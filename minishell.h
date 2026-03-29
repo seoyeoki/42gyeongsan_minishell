@@ -114,15 +114,12 @@ int		wait_child(t_data *data, pid_t pid);
 int		fork_and_exec(t_data *data, t_cmd *cmd, char *cmd_path);
 
 // exec.c
-char	*find_command_path(char *cmd, t_env *env);
 int		execute_command(t_data *data, t_cmd *cmd);
 int		execute_pipeline(t_data *data, t_cmd *cmd);
-int		apply_redir(t_data *data, t_redir *redir);
 void	exec_child(t_data *data, t_cmd *head, t_pipes *pipeline, int i);
 void	close_all_pipes(int **pipes, int count);
 int		count_cmd(t_cmd *cmd);
 void	init_pipes(t_data *data, t_cmd *cmd, t_pipes *pipeline);
-char	**get_execve_args(t_cmd *cmd);
 void	exit_child(t_data *data, t_cmd *head, t_pipes *pipeline, int status);
 
 // exec2.c
@@ -131,6 +128,15 @@ int		prepare_heredoc(t_data *data, t_cmd *cmd);
 int		count_heredocs(t_cmd *cmd);
 void	signal_in_message(int line_count, char *delim);
 int		collect_heredoc_fork(t_redir *redir, t_data *data, t_cmd *head);
+
+// exec_redir.c
+int	set_fd_open(t_redir *redir);
+int	apply_redir(t_data *data, t_redir *redir);
+int	prepare_child(t_data *data, t_cmd *cmd, t_pipes *pipeline, int i);
+
+// cmd_path.c
+char	*find_command_path(char *cmd, t_env *env);
+char	**get_execve_args(t_cmd *cmd);
 
 // image.c
 void	shell_init(void);

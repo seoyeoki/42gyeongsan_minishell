@@ -30,7 +30,7 @@ void	err_syntax_token(char *token);
 void	err_unclosed_quote(void);
 int		syntax_err(t_data *data, char *token);
 
- /* lexer_error.c */
+/* lexer_error.c */
 t_token	*handle_lex_error(t_lex *lx, t_data *data);
 
 /* expand.c */
