@@ -6,7 +6,7 @@
 /*   By: aylee <aylee@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 18:50:42 by aylee             #+#    #+#             */
-/*   Updated: 2026/03/26 19:27:00 by aylee            ###   ########.fr       */
+/*   Updated: 2026/03/29 15:37:16 by aylee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	prepare_heredoc(t_data *data, t_cmd *cmd)
 	{
 		print_error_msg(data, "heredoc", \
 			"maximum here-document count exceeded", 1);
+		free_cmd_list(cmd);
 		return (-1);
 	}
 	cur = cmd;
