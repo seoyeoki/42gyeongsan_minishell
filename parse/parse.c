@@ -12,32 +12,32 @@
 
 #include "parse_int.h"
 
-static int	check_syntax(t_token *tok, t_data *data)
+static int  check_syntax(t_token *tok, t_data *data)
 {
-	t_tok_type	prev;
+    t_tok_type  prev;
 
-	if (!tok)
-		return (0);
-	if (tok->type == TOK_PIPE)
-		return (syntax_err(data, "|"));
-	prev = TOK_WORD;
-	while (tok)
-	{
-		if (tok->type == TOK_PIPE && prev == TOK_PIPE)
-			return (syntax_err(data, "|"));
-		if (tok->type != TOK_WORD && tok->type != TOK_PIPE)
-		{
-			if (!tok->next || tok->next->type != TOK_WORD)
-				return (syntax_err(data, "newline"));
-			if (prev == TOK_PIPE)
-				return (syntax_err(data, tok->str));
-		}
-		prev = tok->type;
-		tok = tok->next;
-	}
-	if (prev == TOK_PIPE)
-		return (syntax_err(data, "|"));
-	return (1);
+    if (!tok)
+        return (0);
+    if (tok->type == TOK_PIPE)
+        return (syntax_err(data, "|"));
+    prev = TOK_WORD;
+    while (tok)
+    {
+        if (tok->type == TOK_PIPE && prev == TOK_PIPE)
+            return (syntax_err(data, "|"));
+        if (tok->type != TOK_WORD && tok->type != TOK_PIPE)
+        {
+            if (!tok->next)
+                return (syntax_err(data, "newline")); 
+            if (tok->next->type != TOK_WORD)
+                return (syntax_err(data, tok->next->str));
+        }
+        prev = tok->type;
+        tok = tok->next;
+    }
+    if (prev == TOK_PIPE)
+        return (syntax_err(data, "|"));
+    return (1);
 }
 
 static t_token	*fill_segment(t_cmd *cur, t_token *tok)
