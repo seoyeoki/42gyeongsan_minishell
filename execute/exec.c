@@ -12,6 +12,26 @@
 
 #include "minishell.h"
 
+static void	clean_child(t_data *data, t_cmd *head, t_pipes *pipeline)
+{
+	rl_clear_history();
+	free_cmd_list(head);
+	free_pipeline(pipeline);
+	free_env_list(data->env);
+}
+
+static void	handle_exec_error(t_data *data, char *p, char **a, char **e)
+{
+	if (a && a[0])
+		print_error(data, a[0], errno, 126);
+	else
+		print_error(data, "execve", errno, 126);
+	free(p);
+	free_split(a);
+	free_split(e);
+	exit(126);
+}
+
 int	set_fd_open(t_redir *redir)
 {
 	int	fd;
@@ -86,8 +106,8 @@ void	exec_child(t_data *data, t_cmd *head, t_pipes *pipeline, int i)
 	char	*path;
 	int		idx;
 
-	idx = i;
 	cmd = head;
+	idx = i;
 	while (idx-- > 0)
 		cmd = cmd->next;
 	signal(SIGQUIT, SIG_DFL);
@@ -98,23 +118,12 @@ void	exec_child(t_data *data, t_cmd *head, t_pipes *pipeline, int i)
 		exit_child(data, head, pipeline, execute_builtin(data, cmd));
 	path = find_command_path(cmd->cmd, data->env);
 	if (!path)
-		return (print_error_msg(data, cmd->cmd, "command not found", 127),
-			exit_child(data, head, pipeline, 127));
+		exit_child(data, head, pipeline, 127);
 	envp = env_to_array(data->env);
 	args = get_execve_args(cmd);
-	rl_clear_history();
-	free_cmd_list(head);
-	free_pipeline(pipeline);
-	free_env_list(data->env);
+	clean_child(data, head, pipeline);
 	execve(path, args, envp);
-	if (args)
-		print_error(data, args[0], errno, 126);
-	else
-		print_error(data, "execve", errno, 126);
-	free(path);
-	free_split(args);
-	free_split(envp);
-	exit(126);
+	handle_exec_error(data, path, args, envp);
 }
 
 int	execute_pipeline(t_data *data, t_cmd *cmd)

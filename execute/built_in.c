@@ -12,6 +12,19 @@
 
 #include "minishell.h"
 
+static int	is_n_flag(char *arg)
+{
+	int	i;
+
+	if (!arg || arg[0] != '-' || !arg[1])
+		return (0);
+	i = 1;
+	while (arg[i])
+		if (arg[i++] != 'n')
+			return (0);
+	return (1);
+}
+
 int	builtin_echo(t_data *data, char **args)
 {
 	int	i;
