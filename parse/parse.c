@@ -1,43 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse2.c                                           :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seoyeoki <seoyeoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 00:00:00 by seoyeoki          #+#    #+#             */
-/*   Updated: 2026/03/03 00:00:00 by seoyeoki         ###   ########.fr       */
+/*   Updated: 2026/03/29 18:36:59 by seoykim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse_int.h"
 
-static int  check_syntax(t_token *tok, t_data *data)
+static int	check_syntax(t_token *tok, t_data *data)
 {
-    t_tok_type  prev;
+	t_tok_type	prev;
 
-    if (!tok)
-        return (0);
-    if (tok->type == TOK_PIPE)
-        return (syntax_err(data, "|"));
-    prev = TOK_WORD;
-    while (tok)
-    {
-        if (tok->type == TOK_PIPE && prev == TOK_PIPE)
-            return (syntax_err(data, "|"));
-        if (tok->type != TOK_WORD && tok->type != TOK_PIPE)
-        {
-            if (!tok->next)
-                return (syntax_err(data, "newline")); 
-            if (tok->next->type != TOK_WORD)
-                return (syntax_err(data, tok->next->str));
-        }
-        prev = tok->type;
-        tok = tok->next;
-    }
-    if (prev == TOK_PIPE)
-        return (syntax_err(data, "|"));
-    return (1);
+	if (!tok)
+		return (0);
+	if (tok->type == TOK_PIPE)
+		return (syntax_err(data, "|"));
+	prev = TOK_WORD;
+	while (tok)
+	{
+		if (tok->type == TOK_PIPE && prev == TOK_PIPE)
+			return (syntax_err(data, "|"));
+		if (tok->type != TOK_WORD && tok->type != TOK_PIPE)
+		{
+			if (!tok->next)
+				return (syntax_err(data, "newline"));
+			if (tok->next->type != TOK_WORD)
+				return (syntax_err(data, tok->next->str));
+		}
+		prev = tok->type;
+		tok = tok->next;
+	}
+	if (prev == TOK_PIPE)
+		return (syntax_err(data, "|"));
+	return (1);
 }
 
 static t_token	*fill_segment(t_cmd *cur, t_token *tok)

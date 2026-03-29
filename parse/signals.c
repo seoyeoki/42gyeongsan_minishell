@@ -6,7 +6,7 @@
 /*   By: seoyeoki <seoyeoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 00:00:00 by seoyeoki          #+#    #+#             */
-/*   Updated: 2026/03/03 00:00:00 by seoyeoki         ###   ########.fr       */
+/*   Updated: 2026/03/29 18:33:59 by seoykim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,3 @@ void	signal_interactive(void)
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
-
