@@ -26,11 +26,13 @@ static void	no_pipe_child(t_data *data, t_cmd *cmd)
 	signal(SIGINT, SIG_DFL);
 	if (prepare_heredoc(data, cmd) == -1)
 	{
+		free_cmd_list(cmd);
 		clean_up(data, NULL);
 		exit(1);
 	}
 	if (apply_redir(data, cmd->redir) == -1)
 	{
+		free_cmd_list(cmd);
 		clean_up(data, NULL);
 		exit(1);
 	}
