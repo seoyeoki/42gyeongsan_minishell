@@ -60,7 +60,12 @@ int	fork_and_exec(t_data *data, t_cmd *cmd, char *cmd_path)
 		return (free(cmd_path), 1);
 	}
 	if (pid == 0)
+	{
+		rl_clear_history();
+		free_cmd_list(cmd);
+		free_env_list(data->env);
 		exec_after_fork(cmd_path, args, envp);
+	}
 	free(cmd_path);
 	free_split(envp);
 	free_split(args);
