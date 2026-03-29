@@ -61,7 +61,6 @@ typedef struct s_redir
 typedef struct s_cmd
 {
 	char			*cmd;
-	char			*cmd;
 	char			**argv;
 	t_redir			*redir;
 	struct s_cmd	*next;
@@ -162,9 +161,6 @@ typedef struct s_token
 	t_tok_type		type;
 	char			*str;
 	int				quoted;
-	t_tok_type		type;
-	char			*str;
-	int				quoted;
 	struct s_token	*next;
 }	t_token;
 
@@ -176,7 +172,6 @@ t_token	*lexer(char *input, t_data *data);
 void	free_tokens(t_token *head);
 t_token	*new_token(t_tok_type type, char *str);
 char	*str_append(char *s, char *add);
-char	*str_append_char(char *s, char c);
 char	*expand_dollar(char *input, int *i, t_data *data);
 char	*expand_tilde(t_data *data);
 char	*expand_line(char *line, t_data *data);
