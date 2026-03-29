@@ -12,8 +12,10 @@
 
 #include "minishell.h"
 
-void	clean_up(t_data *data)
+void	clean_up(t_data *data, t_cmd *cmd)
 {
+	if (cmd)
+		free_cmd_list(cmd);
 	if (data)
 	{
 		if (data->env)

@@ -82,7 +82,7 @@ static int	lex_switch(char *input, int *i, t_lex *lx, t_data *data)
 		flush_word(lx);
 		(*i)++;
 	}
-	else if (ft_strchr("&;()*", c) || (c == '|' && next == '|'))
+	else if (ft_strchr("&;()*\\", c) || (c == '|' && next == '|'))
 	{
 		flush_word(lx);
 		lex_unsupported(input, i, lx);
@@ -113,13 +113,16 @@ t_token	*lexer(char *input, t_data *data)
 	{
 		free_tokens(lx.head);
 		if (lx.error == 1)
+		{
 			err_unclosed_quote();
+			data->exit_status = 1;
+		}
 		else if (lx.error == 2)
 		{
 			err_syntax_token(lx.err_token);
 			free(lx.err_token);
+			data->exit_status = 2;
 		}
-		data->exit_status = 2;
 		return (NULL);
 	}
 	return (lx.head);

@@ -89,14 +89,14 @@ int builtin_cd(t_data *data, char **args);
 int builtin_pwd(t_data *data);
 int builtin_export(t_data *data, char **args);
 int builtin_unset(t_data *data, char **args);
-int builtin_exit(t_data *data, char **args);
+int builtin_exit(t_data *data, t_cmd *cmd, char **args);
 int builtin_env(t_data *data, char **args);
 int execute_builtin(t_data *data, t_cmd *cmd);
 int set_env_var(t_data *data, const char *key, const char *value);
 void make_env_new(t_data *data, char **args, char *equal_sign, int i);
 
 // utils.c
-void clean_up(t_data *data);
+void clean_up(t_data *data, t_cmd *cmd);
 void free_split(char **split);
 char **env_to_array(t_env *env);
 
@@ -113,7 +113,7 @@ char *find_command_path(char *cmd, t_env *env);
 int execute_command(t_data *data, t_cmd *cmd);
 int execute_pipeline(t_data *data, t_cmd *cmd);
 int apply_redir(t_data *data, t_redir *redir);
-void exec_child(t_data *data, t_cmd *cmd, t_pipes *pipeline, int i);
+void exec_child(t_data *data, t_cmd *head, t_pipes *pipeline, int i);
 void close_all_pipes(int **pipes, int count);
 int count_cmd(t_cmd *cmd);
 void init_pipes(t_data *data, t_cmd *cmd, t_pipes *pipeline);

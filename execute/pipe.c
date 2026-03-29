@@ -20,19 +20,24 @@
  */
 static void	no_pipe_child(t_data *data, t_cmd *cmd)
 {
+	int	status;
+
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
 	if (prepare_heredoc(data, cmd) == -1)
 	{
-		clean_up(data);
+		clean_up(data, NULL);
 		exit(1);
 	}
 	if (apply_redir(data, cmd->redir) == -1)
 	{
-		clean_up(data);
+		clean_up(data, NULL);
 		exit(1);
 	}
-	exit(execute_command(data, cmd));
+	status = execute_command(data, cmd);
+	free_cmd_list(cmd);
+	free_env_list(data->env);
+	exit(status);
 }
 
 int	no_pipe(t_data *data, t_cmd *cmd)
@@ -75,7 +80,7 @@ int	get_pids(t_data *data, t_cmd *cmd, t_pipes *pipeline)
 			return (1);
 		}
 		if (pipeline->pids[i] == 0)
-			exec_child(data, cur, pipeline, i);
+			exec_child(data, cmd, pipeline, i);
 		cur = cur->next;
 		i++;
 	}
