@@ -6,24 +6,11 @@
 /*   By: aylee <aylee@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 14:46:49 by aylee             #+#    #+#             */
-/*   Updated: 2026/03/26 19:07:59 by aylee            ###   ########.fr       */
+/*   Updated: 2026/03/29 17:37:39 by aylee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	is_n_flag(char *arg)
-{
-	int	i;
-
-	if (!arg || arg[0] != '-' || !arg[1])
-		return (0);
-	i = 1;
-	while (arg[i])
-		if (arg[i++] != 'n')
-			return (0);
-	return (1);
-}
 
 int	builtin_echo(t_data *data, char **args)
 {
@@ -50,40 +37,6 @@ int	builtin_echo(t_data *data, char **args)
 	}
 	if (newline)
 		printf("\n");
-	return (0);
-}
-
-int	builtin_cd(t_data *data, char **args)
-{
-	const char	*path;
-	t_env		*home_node;
-	t_env		*pwd_node;
-	char		*cwd;
-
-	if (!args || args[0] == NULL)
-	{
-		home_node = find_env_node(data->env, "HOME");
-		if (home_node)
-			path = home_node->value;
-		else
-		{
-			print_error_msg(data, "cd", "HOME not set", 1);
-			return (1);
-		}
-	}
-	else
-		path = args[0];
-	if (chdir(path) != 0)
-	{
-		print_error_msg(data, "cd", strerror(errno), 1);
-		return (1);
-	}
-	pwd_node = find_env_node(data->env, "PWD");
-	if (pwd_node)
-		set_env_var(data, "OLDPWD", pwd_node->value);
-	cwd = getcwd(NULL, 0);
-	set_env_var(data, "PWD", cwd);
-	free(cwd);
 	return (0);
 }
 

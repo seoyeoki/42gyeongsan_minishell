@@ -6,7 +6,7 @@
 /*   By: aylee <aylee@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 19:01:21 by aylee             #+#    #+#             */
-/*   Updated: 2026/03/26 19:36:00 by aylee            ###   ########.fr       */
+/*   Updated: 2026/03/29 17:40:44 by aylee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,7 @@ int	builtin_exit(t_data *data, t_cmd *cmd, char **args)
 		exit(2);
 	}
 	if (args[1])
-	{
-		print_error_msg(data, "exit", "too many arguments", 1);
-		return (1);
-	}
+		return (print_error_msg(data, "exit", "too many arguments", 1), 1);
 	status = str_to_ll(args[0]);
 	free_cmd_list(cmd);
 	clean_up(data, NULL);

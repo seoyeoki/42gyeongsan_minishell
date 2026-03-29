@@ -6,7 +6,7 @@
 /*   By: aylee <aylee@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 00:00:00 by aylee             #+#    #+#             */
-/*   Updated: 2026/03/29 17:22:10 by aylee            ###   ########.fr       */
+/*   Updated: 2026/03/29 17:26:06 by aylee            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,20 @@
 # include <readline/history.h>
 # include "./libft/libft.h"
 
-extern volatile sig_atomic_t g_signal;
+extern volatile sig_atomic_t	g_signal;
 
 typedef struct s_env
 {
 	char			*key;
 	char			*value;
 	struct s_env	*next;
-} t_env;
+}	t_env;
 
 typedef struct s_data
 {
 	t_env	*env;
 	int		exit_status;
-} t_data;
+}	t_data;
 
 typedef enum e_redir_type
 {
@@ -47,7 +47,7 @@ typedef enum e_redir_type
 	REDIR_APPEND,
 	REDIR_HEREDOC,
 	REDIR_PIPE
-} t_redir_type;
+}	t_redir_type;
 
 typedef struct s_redir
 {
@@ -56,22 +56,22 @@ typedef struct s_redir
 	int				fd;
 	int				quoted;
 	struct s_redir	*next;
-} t_redir;
+}	t_redir;
 
 typedef struct s_cmd
 {
-	char		*cmd;
+	char			*cmd;
 	char			**argv;
 	t_redir			*redir;
 	struct s_cmd	*next;
-} t_cmd;
+}	t_cmd;
 
 typedef struct s_pipes
 {
 	int		**pipes;
 	int		count;
 	pid_t	*pids;
-} t_pipes;
+}	t_pipes;
 
 // env.c
 t_env	*create_env_node(const char *key, const char *value);
@@ -154,15 +154,15 @@ typedef enum e_tok_type
 	TOK_REDIR_OUT,
 	TOK_REDIR_APPEND,
 	TOK_HEREDOC,
-} t_tok_type;
+}	t_tok_type;
 
 typedef struct s_token
 {
-	t_tok_type	type;
-	char		*str;
-	int		quoted;
+	t_tok_type		type;
+	char			*str;
+	int				quoted;
 	struct s_token	*next;
-} t_token;
+}	t_token;
 
 t_cmd	*parse_pipeline(char *input, t_data *data);
 void	free_cmd_list(t_cmd *cmd);
