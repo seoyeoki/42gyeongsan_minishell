@@ -5,3 +5,5 @@ minishell_asan
 aylee_new/
 .DS_Store
 .idea/
+docs/
+CLAUDE.md
