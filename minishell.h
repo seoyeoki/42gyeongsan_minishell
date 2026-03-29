@@ -130,9 +130,9 @@ void	signal_in_message(int line_count, char *delim);
 int		collect_heredoc_fork(t_redir *redir, t_data *data, t_cmd *head);
 
 // exec_redir.c
-int	set_fd_open(t_redir *redir);
-int	apply_redir(t_data *data, t_redir *redir);
-int	prepare_child(t_data *data, t_cmd *cmd, t_pipes *pipeline, int i);
+int		set_fd_open(t_redir *redir);
+int		apply_redir(t_data *data, t_redir *redir);
+int		prepare_child(t_data *data, t_cmd *cmd, t_pipes *pipeline, int i);
 
 // cmd_path.c
 char	*find_command_path(char *cmd, t_env *env);

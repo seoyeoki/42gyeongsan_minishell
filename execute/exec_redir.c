@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_redir.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seoykim <seoykim@student.42gyeongsan.      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/29 19:56:29 by seoykim           #+#    #+#             */
+/*   Updated: 2026/03/29 19:56:30 by seoykim          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int set_fd_open(t_redir *redir)
+int	set_fd_open(t_redir *redir)
 {
-	int fd;
+	int	fd;
 
 	fd = -1;
 	if (redir->type == REDIR_IN)
@@ -14,7 +26,7 @@ int set_fd_open(t_redir *redir)
 	return (fd);
 }
 
-int apply_redir(t_data *data, t_redir *redir)
+int	apply_redir(t_data *data, t_redir *redir)
 {
 	int	fd;
 
