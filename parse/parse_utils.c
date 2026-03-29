@@ -12,18 +12,15 @@
 
 #include "parse_int.h"
 
-t_cmd	*new_cmd(void)
+char	*str_append(char *s, char *add)
 {
-	t_cmd	*cmd;
+	char	*res;
 
-	cmd = malloc(sizeof(t_cmd));
-	if (!cmd)
-		return (NULL);
-	cmd->cmd = NULL;
-	cmd->argv = NULL;
-	cmd->redir = NULL;
-	cmd->next = NULL;
-	return (cmd);
+	if (!s)
+		return (ft_strdup(add));
+	res = ft_strjoin(s, add);
+	free(s);
+	return (res);
 }
 
 void	free_redir_list(t_redir *redir)

@@ -75,10 +75,12 @@ typedef struct s_pipes
 
 // env.c
 t_env	*parse_env(char **envp);
+void	free_env_list(t_env *head);
 void	print_env_list(t_env *head);
 
 // make_node.c
 t_env	*create_env_node(const char *key, const char *value);
+void	free_env_node(t_env *node);
 t_env	*find_env_node(t_env *head, const char *key);
 t_env	*add_env_node(t_env **head, const char *key, const char *value);
 void	delete_env(t_env **head, char *key);
@@ -116,6 +118,7 @@ int		is_builtin(char *cmd);
 // main_init.c
 void	init_data(t_data *data, char **envp);
 int		count_cmd(t_cmd *cmd);
+void	close_all_pipes(int **pipes, int count);
 void	init_pipes(t_data *data, t_cmd *cmd, t_pipes *pipeline);
 
 // command.c
@@ -132,6 +135,7 @@ void	exit_child(t_data *data, t_cmd *head, t_pipes *pipeline, int status);
 int		make_right_path(const char *cmd, char **path_dirs, char **full_path);
 int		prepare_heredoc(t_data *data, t_cmd *cmd);
 void	signal_in_message(int line_count, char *delim);
+int		collect_heredoc_fork(t_redir *redir, t_data *data, t_cmd *head);
 
 // exec_redir.c
 int		set_fd_open(t_redir *redir);
@@ -147,6 +151,7 @@ void	shell_init(void);
 
 // heredoc.c
 int		count_heredocs(t_cmd *cmd);
+void	heredoc_child(int write_fd, t_data *data, t_redir *redir, t_cmd *head);
 int		collect_heredoc(t_redir *redir, t_data *data, t_cmd *head);
 
 // no_pipe.c
@@ -155,6 +160,7 @@ int		no_pipe(t_data *data, t_cmd *cmd);
 // pipe.c
 int		get_pids(t_data *data, t_cmd *cmd, t_pipes *pipeline);
 int		wait_pids(t_data *data, t_pipes *pipeline);
+void	free_pipeline(t_pipes *pipeline);
 
 // parse/
 typedef enum e_tok_type
@@ -179,7 +185,7 @@ typedef struct s_token
 t_cmd	*parse_pipeline(char *input, t_data *data);
 
 // parse_utils.c
-t_cmd	*new_cmd(void);
+char	*str_append(char *s, char *add);
 void	free_redir_list(t_redir *redir);
 void	free_cmd_list(t_cmd *cmd);
 
@@ -191,7 +197,6 @@ t_token	*new_token(t_tok_type type, char *str);
 void	free_tokens(t_token *head);
 
 // expand.c
-char	*str_append(char *s, char *add);
 char	*expand_dollar(char *input, int *i, t_data *data);
 char	*expand_tilde(t_data *data);
 char	*expand_line(char *line, t_data *data);

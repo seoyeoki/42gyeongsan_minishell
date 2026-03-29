@@ -23,17 +23,6 @@ static t_env	*find_env_exact(t_env *head, const char *key)
 	return (NULL);
 }
 
-char	*str_append(char *s, char *add)
-{
-	char	*res;
-
-	if (!s)
-		return (ft_strdup(add));
-	res = ft_strjoin(s, add);
-	free(s);
-	return (res);
-}
-
 char	*expand_tilde(t_data *data)
 {
 	t_env	*node;

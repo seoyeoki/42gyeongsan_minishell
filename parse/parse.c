@@ -64,6 +64,20 @@ static t_token	*fill_segment(t_cmd *cur, t_token *tok)
 	return (tok);
 }
 
+static t_cmd	*new_cmd(void)
+{
+	t_cmd	*cmd;
+
+	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+		return (NULL);
+	cmd->cmd = NULL;
+	cmd->argv = NULL;
+	cmd->redir = NULL;
+	cmd->next = NULL;
+	return (cmd);
+}
+
 static t_cmd	*build_cmds(t_token *tok)
 {
 	t_cmd	*head;
