@@ -74,60 +74,63 @@ typedef struct s_pipes
 }	t_pipes;
 
 // env.c
-t_env	*create_env_node(const char *key, const char *value);
-void	free_env_node(t_env *node);
-t_env	*find_env_node(t_env *head, const char *key);
-t_env	*add_env_node(t_env **head, const char *key, const char *value);
 t_env	*parse_env(char **envp);
-void	free_env_list(t_env *head);
-void	delete_env(t_env **head, char *key);
 void	print_env_list(t_env *head);
 
+// make_node.c
+t_env	*create_env_node(const char *key, const char *value);
+t_env	*find_env_node(t_env *head, const char *key);
+t_env	*add_env_node(t_env **head, const char *key, const char *value);
+void	delete_env(t_env **head, char *key);
+
 // built_in.c
+int		builtin_pwd(t_data *data);
+int		builtin_unset(t_data *data, char **args);
+int		builtin_env(t_data *data, char **args);
+
+// sub_built.c
 int		builtin_echo(t_data *data, char **args);
 int		builtin_cd(t_data *data, char **args);
-int		builtin_pwd(t_data *data);
-int		builtin_export(t_data *data, char **args);
-int		builtin_unset(t_data *data, char **args);
-int		builtin_exit(t_data *data, t_cmd *cmd, char **args);
-int		builtin_env(t_data *data, char **args);
 int		execute_builtin(t_data *data, t_cmd *cmd);
+
+// exit.c
+int		builtin_exit(t_data *data, t_cmd *cmd, char **args);
+
+// export.c
+int		builtin_export(t_data *data, char **args);
 int		set_env_var(t_data *data, const char *key, const char *value);
 void	make_env_new(t_data *data, char **args, char *equal_sign, int i);
 
 // utils.c
 void	clean_up(t_data *data, t_cmd *cmd);
-void	free_split(char **split);
 char	**env_to_array(t_env *env);
 
-// main.c
+// stderr.c
 void	print_error(t_data *data, char *cmd, int err_num, int exit_code);
 void	print_error_msg(t_data *data, char *cmd, char *msg, int exit_code);
+
+// main.c
 int		is_builtin(char *cmd);
 
 // main_init.c
 void	init_data(t_data *data, char **envp);
+int		count_cmd(t_cmd *cmd);
+void	init_pipes(t_data *data, t_cmd *cmd, t_pipes *pipeline);
 
 // command.c
 void	update_exit_status(t_data *data, int status);
 int		wait_child(t_data *data, pid_t pid);
-int		fork_and_exec(t_data *data, t_cmd *cmd, char *cmd_path);
+int		execute_command(t_data *data, t_cmd *cmd);
 
 // exec.c
-int		execute_command(t_data *data, t_cmd *cmd);
 int		execute_pipeline(t_data *data, t_cmd *cmd);
 void	exec_child(t_data *data, t_cmd *head, t_pipes *pipeline, int i);
-void	close_all_pipes(int **pipes, int count);
-int		count_cmd(t_cmd *cmd);
-void	init_pipes(t_data *data, t_cmd *cmd, t_pipes *pipeline);
 void	exit_child(t_data *data, t_cmd *head, t_pipes *pipeline, int status);
 
 // exec2.c
 int		make_right_path(const char *cmd, char **path_dirs, char **full_path);
 int		prepare_heredoc(t_data *data, t_cmd *cmd);
-int		count_heredocs(t_cmd *cmd);
 void	signal_in_message(int line_count, char *delim);
-int		collect_heredoc_fork(t_redir *redir, t_data *data, t_cmd *head);
 
 // exec_redir.c
 int		set_fd_open(t_redir *redir);
@@ -142,14 +145,15 @@ char	**get_execve_args(t_cmd *cmd);
 void	shell_init(void);
 
 // heredoc.c
-void	heredoc_child(int write_fd, t_data *data, t_redir *redir, t_cmd *head);
+int		count_heredocs(t_cmd *cmd);
 int		collect_heredoc(t_redir *redir, t_data *data, t_cmd *head);
 
-// pipe.c
+// no_pipe.c
 int		no_pipe(t_data *data, t_cmd *cmd);
+
+// pipe.c
 int		get_pids(t_data *data, t_cmd *cmd, t_pipes *pipeline);
 int		wait_pids(t_data *data, t_pipes *pipeline);
-void	free_pipeline(t_pipes *pipeline);
 
 // parse/
 typedef enum e_tok_type
@@ -170,17 +174,28 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+// parse.c
 t_cmd	*parse_pipeline(char *input, t_data *data);
-void	free_cmd_list(t_cmd *cmd);
+
+// parse_utils.c
 t_cmd	*new_cmd(void);
 void	free_redir_list(t_redir *redir);
+void	free_cmd_list(t_cmd *cmd);
+
+// lexer.c
 t_token	*lexer(char *input, t_data *data);
-void	free_tokens(t_token *head);
+
+// lexer_utils.c
 t_token	*new_token(t_tok_type type, char *str);
+void	free_tokens(t_token *head);
+
+// expand.c
 char	*str_append(char *s, char *add);
 char	*expand_dollar(char *input, int *i, t_data *data);
 char	*expand_tilde(t_data *data);
 char	*expand_line(char *line, t_data *data);
+
+// signals.c
 void	signal_interactive(void);
 
 #endif
